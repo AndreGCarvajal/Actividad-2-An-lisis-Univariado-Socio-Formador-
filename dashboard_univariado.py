@@ -12,33 +12,18 @@ import io
 # Identidad Visual y Colores de Marca: CLV México (clvmexico.com)
 # ==============================================================================
 CLV_PRIMARY = "#00B2FF"      # Azul Eléctrico / Cian Digital Oficial
-CLV_NAVY = "#0F2942"         # Azul Marino Profundo Corporativo
+CLV_ACCENT = "#0284C7"       # Azul Corporativo de Contraste
 CLV_DARK = "#0E0E0E"         # Negro Ónix del Logotipo
 CLV_CYAN = "#38BDF8"         # Cian Claro de Acento
-CLV_SLATE = "#1E293B"        # Gris Pizarra
-CLV_LIGHT_BG = "#F8FAFC"     # Fondo Claro Ejecutivo
-CLV_BORDER = "#E2E8F0"       # Bordes Sutiles
 
 # Gradiente corporativo para gráficos cuantitativos continuos
-CLV_GRADIENT = [[0.0, "#0F2942"], [0.5, "#0284C7"], [1.0, "#00B2FF"]]
+CLV_GRADIENT = [[0.0, "#0369A1"], [0.5, CLV_ACCENT], [1.0, CLV_PRIMARY]]
 
 # Paleta categórica armónica para variables cualitativas
 CLV_QUALITATIVE = [
-    "#00B2FF", "#0F2942", "#38BDF8", "#10B981", 
+    "#00B2FF", "#2563EB", "#38BDF8", "#10B981",
     "#6366F1", "#F59E0B", "#EC4899", "#64748B"
 ]
-
-# Configuración de Plantilla Plotly para Modo Oscuro y Colores CLV
-import plotly.io as pio
-pio.templates["clv_dark"] = go.layout.Template(
-    layout=go.Layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#E2E8F0"),
-        colorway=CLV_QUALITATIVE
-    )
-)
-pio.templates.default = "plotly_dark+clv_dark"
 
 # Ruta del Logo
 LOGO_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clv_logo.png")
@@ -55,122 +40,79 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilos CSS adaptados para Modo Oscuro y temática CLV México
-st.markdown("""
+# Estilos puntuales de marca; los colores de superficie y texto vienen del tema activo.
+st.markdown(f"""
 <style>
-    /* Tipografía y Títulos adaptados a Modo Oscuro */
-    .main-title {
-        font-size: 2.1rem;
-        font-weight: 800;
-        color: #FFFFFF !important;
-        margin-bottom: 0.2rem;
-        letter-spacing: -0.5px;
-    }
-    .sub-title {
-        font-size: 1.02rem;
-        color: #94A3B8 !important;
-        margin-bottom: 1.2rem;
-    }
-    .header-badge {
-        display: inline-block;
-        background-color: #00B2FF;
-        color: #0E0E0E;
+    .block-container {{
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+    }}
+
+    .main .block-container h1 {{
+        font-size: 1.8rem !important;
+        line-height: 1.2;
+        margin: 0 0 0.25rem !important;
+        letter-spacing: -0.03em;
+    }}
+
+    .st-key-header_logo [data-testid="stImage"] {{
+        background-color: {CLV_DARK};
+        border-radius: 8px;
+        padding: 6px;
+    }}
+
+    .st-key-header_logo [data-testid="stImage"] img {{
+        width: 96px;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+    }}
+
+    div[data-testid="stMetric"] {{
+        background: color-mix(in srgb, currentColor 5%, transparent);
+        border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+        border-radius: 10px !important;
+        padding: 14px 16px !important;
+        box-shadow: 0 2px 8px rgba(15, 41, 66, 0.06);
+    }}
+
+    div[data-testid="stMetricLabel"] {{
+        opacity: 0.72;
+        font-size: 0.82rem;
+        font-weight: 500;
+    }}
+
+    div[data-testid="stMetricValue"] {{
+        font-size: 1.75rem;
         font-weight: 700;
-        font-size: 0.75rem;
-        padding: 4px 12px;
-        border-radius: 9999px;
-        margin-bottom: 6px;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-    }
-    
-    /* Pestañas (Tabs) con estilo CLV para Modo Oscuro */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        border-bottom: 2px solid #00B2FF;
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: 46px;
-        background-color: #1E293B !important;
-        border-radius: 8px 8px 0px 0px;
-        font-weight: 600;
-        color: #94A3B8 !important;
-        padding: 10px 18px;
-        transition: all 0.2s ease-in-out;
-    }
-    .stTabs [data-baseweb="tab"]:hover {
-        background-color: #2D3D52 !important;
-        color: #FFFFFF !important;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #00B2FF !important;
-        color: #0E0E0E !important;
-        font-weight: 700 !important;
-    }
-    
-    /* Botón Primario de Acción */
-    div.stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #00B2FF 0%, #0088CC 100%) !important;
-        color: #0E0E0E !important;
-        border: none !important;
-        font-weight: 700 !important;
-        border-radius: 8px !important;
-        padding: 10px 20px !important;
-        box-shadow: 0 4px 12px rgba(0, 178, 255, 0.28) !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-    div.stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #0095D9 0%, #0077B3 100%) !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 6px 16px rgba(0, 178, 255, 0.4) !important;
-        transform: translateY(-1px) !important;
-    }
-    
-    /* Tarjetas de Métricas (st.metric) en Modo Oscuro Elegante */
-    div[data-testid="stMetric"] {
-        background: #131B26 !important;
-        border: 1px solid #2A3649 !important;
-        border-top: 4px solid #00B2FF !important;
-        border-radius: 12px !important;
-        padding: 14px 18px !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
-    }
-    div[data-testid="stMetricValue"] {
-        color: #FFFFFF !important;
-        font-weight: 800 !important;
-        font-size: 1.85rem !important;
-    }
-    div[data-testid="stMetricLabel"],
-    div[data-testid="stMetricLabel"] > div,
-    div[data-testid="stMetricLabel"] p {
-        color: #CBD5E1 !important;
-        font-weight: 600 !important;
-        font-size: 0.92rem !important;
-    }
-    
-    /* Contenedor del Logo en Sidebar */
-    .sidebar-logo-container {
-        background-color: #0E0E0E;
-        border-radius: 10px;
-        padding: 12px;
-        text-align: center;
-        margin-bottom: 12px;
-        border: 1px solid #334155;
-    }
+        line-height: 1.2;
+    }}
+
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {{
+        margin-top: 0.65rem;
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+    }}
+
+    h2, h3, h4, h5 {{
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+        margin-top: 0.7rem;
+        margin-bottom: 0.45rem;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
-# Encabezado Principal con Logotipo y Título Corporativo
-col_h1, col_h2 = st.columns([1, 4])
+# Encabezado
+col_h1, col_h2 = st.columns([0.9, 4], vertical_alignment="center")
 with col_h1:
     if os.path.exists(LOGO_PATH):
-        st.image(LOGO_PATH, use_container_width=True)
+        with st.container(key="header_logo"):
+            st.image(LOGO_PATH, width=96)
 with col_h2:
-    st.markdown('<span class="header-badge">Inteligencia de Datos CLV México</span>', unsafe_allow_html=True)
-    st.markdown('<div class="main-title">Dashboard de Análisis Exploratorio Univariado</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Plataforma analítica corporativa para diagnóstico de calidad de datos y análisis univariado del socio formador CLV México.</div>', unsafe_allow_html=True)
-
-st.markdown("---")
+    st.title("Panel de análisis")
+    st.caption("Análisis exploratorio de datos · CLV México")
 
 # ==============================================================================
 # Funciones Auxiliares y de Procesamiento
@@ -246,16 +188,7 @@ def generar_excel_descarga(df: pd.DataFrame) -> bytes:
 # ==============================================================================
 # Barra Lateral (Sidebar)
 # ==============================================================================
-if os.path.exists(LOGO_PATH):
-    st.sidebar.image(LOGO_PATH, use_container_width=True)
-    st.sidebar.markdown(
-        "<div style='text-align: center; color: #94A3B8; font-size: 0.78rem; margin-top: -6px; margin-bottom: 14px; font-weight: 500;'>"
-        "Soluciones Digitales en Odontología CAD-CAM"
-        "</div>", 
-        unsafe_allow_html=True
-    )
-
-st.sidebar.header("Configuración y Datos")
+st.sidebar.subheader("Datos")
 
 archivo_defecto = buscar_archivo_por_defecto()
 
@@ -273,7 +206,9 @@ elif archivo_defecto is not None:
     fuente_datos = archivo_defecto
     st.sidebar.info(f"Usando archivo local por defecto:\n`{os.path.basename(archivo_defecto)}`")
 else:
-    st.warning("Por favor sube un archivo Excel para comenzar.")
+    with st.container(border=True):
+        st.subheader("Carga el Excel para comenzar")
+        st.write("En la barra lateral, selecciona **Cargar archivo Excel** y elige el libro de CLV que quieres analizar.")
     st.stop()
 
 # Detección de hojas disponibles
@@ -283,8 +218,7 @@ if not hojas_disponibles:
     st.stop()
 
 # Selector de hoja
-st.sidebar.markdown("---")
-st.sidebar.subheader("Selección de Módulo / Hoja")
+st.sidebar.subheader("Selección de hoja")
 hoja_seleccionada = st.sidebar.selectbox(
     "Selecciona la hoja a analizar:",
     options=hojas_disponibles,
@@ -293,8 +227,7 @@ hoja_seleccionada = st.sidebar.selectbox(
 )
 
 # Opciones de procesamiento específicas
-st.sidebar.markdown("---")
-st.sidebar.subheader("Opciones de Procesamiento")
+st.sidebar.subheader("Opciones de análisis")
 
 tratar_outliers = st.sidebar.checkbox(
     "Tratar valores atípicos (IQR + Mediana)",
@@ -465,8 +398,6 @@ with col_kpi4:
         help="Valores atípicos detectados por la regla de Tukey (1.5 IQR)"
     )
 
-st.markdown("---")
-
 # ==============================================================================
 # Separación de Columnas Cuantitativas y Categóricas
 # ==============================================================================
@@ -528,7 +459,7 @@ with tab1:
                 title="Columnas con Valores Nulos (Antes de Limpieza)"
             )
             fig_nulos.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20), showlegend=False)
-            st.plotly_chart(fig_nulos, use_container_width=True)
+            st.plotly_chart(fig_nulos, use_container_width=True, theme="streamlit")
         else:
             st.success("Esta hoja no presenta valores nulos en ninguna de sus columnas.")
         
@@ -559,7 +490,7 @@ with tab1:
                 title="Cantidad de Registros Atípicos por Variable Numérica"
             )
             fig_out.update_layout(height=350, margin=dict(l=20, r=20, t=40, b=20), showlegend=False)
-            st.plotly_chart(fig_out, use_container_width=True)
+            st.plotly_chart(fig_out, use_container_width=True, theme="streamlit")
         else:
             st.info("No se configuraron variables cuantitativas con outliers en esta hoja o no aplican.")
 
@@ -584,11 +515,11 @@ with tab2:
             fig_flujo = px.pie(
                 df_flujo, names='Flujo', values='Cantidad',
                 hole=0.45,
-                color_discrete_sequence=[CLV_PRIMARY, CLV_NAVY],
+                color_discrete_sequence=[CLV_PRIMARY, CLV_CYAN],
                 title="Proporción por Flujo de Trabajo"
             )
             fig_flujo.update_traces(textposition='inside', textinfo='percent+label')
-            st.plotly_chart(fig_flujo, use_container_width=True)
+            st.plotly_chart(fig_flujo, use_container_width=True, theme="streamlit")
             
         with c_art2:
             st.markdown("#### Nivel 2: Categorías Macro Oficiales")
@@ -601,7 +532,7 @@ with tab2:
                 title="Distribución de Categorías Macro"
             )
             fig_macro.update_traces(textposition='inside', textinfo='percent+label')
-            st.plotly_chart(fig_macro, use_container_width=True)
+            st.plotly_chart(fig_macro, use_container_width=True, theme="streamlit")
             
         st.markdown("#### Nivel 3: Subcategorías más Frecuentes")
         df_subcat = df_proc[~df_proc['categoria'].isin(flujos + macro_cats)]['categoria'].value_counts().head(top_n).reset_index()
@@ -611,7 +542,7 @@ with tab2:
             text='Frecuencia', color='Frecuencia', color_continuous_scale=CLV_GRADIENT
         )
         fig_sub.update_layout(yaxis={'categoryorder': 'total ascending'}, height=400)
-        st.plotly_chart(fig_sub, use_container_width=True)
+        st.plotly_chart(fig_sub, use_container_width=True, theme="streamlit")
 
     else:
         # Selector de variable categórica estándar
@@ -678,7 +609,7 @@ with tab2:
                     fig_cat.update_traces(textposition='inside', textinfo='percent+label')
                     fig_cat.update_layout(height=450)
                 
-                st.plotly_chart(fig_cat, use_container_width=True)
+                st.plotly_chart(fig_cat, use_container_width=True, theme="streamlit")
                 
             with col_g2:
                 st.markdown(f"##### Tabla de Frecuencias")
@@ -709,7 +640,7 @@ with tab2:
                 color_continuous_scale=CLV_GRADIENT,
                 title="Distribución Anual de Órdenes de Compra"
             )
-            st.plotly_chart(fig_anios, use_container_width=True)
+            st.plotly_chart(fig_anios, use_container_width=True, theme="streamlit")
             
         with c_temp2:
             meses_map = {1:'Ene', 2:'Feb', 3:'Mar', 4:'Abr', 5:'May', 6:'Jun',
@@ -721,8 +652,8 @@ with tab2:
                 markers=True, line_shape='spline',
                 title="Estacionalidad Mensual de Órdenes (Ene - Dic)"
             )
-            fig_meses.update_traces(line_color=CLV_PRIMARY, line_width=3, marker_size=8, marker_color=CLV_NAVY)
-            st.plotly_chart(fig_meses, use_container_width=True)
+            fig_meses.update_traces(line_color=CLV_ACCENT, line_width=3, marker_size=8, marker_color=CLV_PRIMARY)
+            st.plotly_chart(fig_meses, use_container_width=True, theme="streamlit")
 
 # ------------------------------------------------------------------------------
 # TAB 3: Análisis Univariado Cuantitativo
@@ -775,7 +706,7 @@ with tab3:
         fig_comb.add_trace(
             go.Histogram(
                 x=serie_num, name="Frecuencia", 
-                marker_color=CLV_NAVY, marker_line_color=CLV_PRIMARY, 
+                marker_color=CLV_ACCENT, marker_line_color=CLV_PRIMARY,
                 marker_line_width=1, opacity=0.85
             ),
             row=2, col=1
@@ -787,7 +718,7 @@ with tab3:
             margin=dict(l=20, r=20, t=40, b=20),
             hovermode='x'
         )
-        st.plotly_chart(fig_comb, use_container_width=True)
+        st.plotly_chart(fig_comb, use_container_width=True, theme="streamlit")
         
         # 3. Agrupación en Clases mediante Regla de Sturges (Actividad 2)
         st.markdown("---")
@@ -822,7 +753,7 @@ with tab3:
                 title="Frecuencia por Intervalo de Sturges"
             )
             fig_clases.update_layout(xaxis_tickangle=-45, height=350, showlegend=False)
-            st.plotly_chart(fig_clases, use_container_width=True)
+            st.plotly_chart(fig_clases, use_container_width=True, theme="streamlit")
 
 # ------------------------------------------------------------------------------
 # TAB 4: Datos y Descarga
